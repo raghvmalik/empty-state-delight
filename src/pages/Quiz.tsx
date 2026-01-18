@@ -52,12 +52,22 @@ const Quiz = () => {
             </ul>
           </div>
 
-          <button
-            onClick={() => navigate('/')}
-            className="px-6 py-3 bg-secondary text-secondary-foreground font-mono text-sm rounded hover:opacity-80 transition-opacity"
-          >
-            ← Try Again (Reset)
-          </button>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <button
+              onClick={() => navigate('/')}
+              className="px-6 py-3 bg-secondary text-secondary-foreground font-mono text-sm rounded hover:opacity-80 transition-opacity"
+            >
+              ← Try Again
+            </button>
+            <a
+              href="https://raghvmalik.github.io/quizmasterpro/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 bg-accent text-accent-foreground font-mono text-sm rounded hover:opacity-80 transition-opacity"
+            >
+              Start Quiz →
+            </a>
+          </div>
         </div>
       </div>
 
