@@ -8,9 +8,9 @@ import CursorBlocker from '@/components/CursorBlocker';
 
 const messages = [
   "There is no website here.",
-  "Seriously. Nothing to see.",
+  "Seriously.. Nothing to see.",
   "Why are you still clicking?",
-  "Stop. It.",
+  "STOP.",
   "I'm warning you...",
   "Fine. I'll take your cursor.",
   "Ha! Try clicking now!",
@@ -21,7 +21,7 @@ const messages = [
   "You're actually persistent!",
   "The cracks are forming...",
   "I can't hold on much longer!",
-  "FINE! YOU WIN!",
+  "FINE! YOU WIN! :/",
 ];
 
 const consoleHints = [
@@ -370,7 +370,7 @@ const Index = () => {
             clickCount > 4 ? 'opacity-50' : 'opacity-100'
           }`}
         >
-          {clickCount < 4 && "Error 404 :-(."}
+          {clickCount < 4 && "Error 404 :-("}
           {clickCount >= 4 && clickCount < 8 && "...or so you think."}
           {clickCount >= 8 && clickCount < 15 && cursorHidden && "Where did your cursor go? 😈"}
           {clickCount >= 8 && clickCount < 15 && !cursorHidden && "Clever! But I have more tricks..."}
