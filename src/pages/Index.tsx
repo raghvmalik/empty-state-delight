@@ -66,7 +66,7 @@ const Index = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showKeyHint, setShowKeyHint] = useState(false);
   
-  const breakThreshold = 40;
+  const breakThreshold = 60;
 
   // Console welcome message
   useEffect(() => {
@@ -397,12 +397,6 @@ const Index = () => {
           })}
         </div>
 
-        {/* Hidden interaction counter */}
-        {clickCount > 3 && (
-          <p className="text-xs text-muted-foreground mt-8 opacity-30 font-mono">
-            [{clickCount}/{breakThreshold}]
-          </p>
-        )}
 
         {/* Reveal button */}
         {isRevealed && (
