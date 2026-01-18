@@ -108,8 +108,8 @@ const FakePopup = ({ onClose, position, message }: FakePopupProps) => {
       // Spawn mini popups
       setShowMiniPopups(true);
       setCurrentTroll("MORE POPUPS! 🎉");
-    } else if (newCount >= 12) {
-      // Finally close
+    } else if (newCount >= 15) {
+      // Finally close after 15 attempts
       console.log('%c🎉 You survived the popup chaos!', 'color: #2dd4bf; font-size: 16px;');
       onClose();
     }
