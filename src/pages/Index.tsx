@@ -370,7 +370,7 @@ const Index = () => {
             clickCount > 4 ? 'opacity-50' : 'opacity-100'
           }`}
         >
-          {clickCount < 4 && "This page is intentionally empty."}
+          {clickCount < 4 && "Error 404 :-(."}
           {clickCount >= 4 && clickCount < 8 && "...or so you think."}
           {clickCount >= 8 && clickCount < 15 && cursorHidden && "Where did your cursor go? 😈"}
           {clickCount >= 8 && clickCount < 15 && !cursorHidden && "Clever! But I have more tricks..."}
