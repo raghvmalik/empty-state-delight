@@ -240,9 +240,11 @@ const Index = () => {
 
   const handleClick = useCallback(() => {
     if (isLoading) return;
+    
+    // Block clicks entirely when cursor is hidden - only 'C' key restores functionality
     if (cursorHidden && !cursorRestored) {
-      // Can still click via keyboard/touch
-      console.log('%c🤔 Clicking without a cursor? Impressive!', 'color: #fbbf24;');
+      console.log('%c🚫 Nice try! Your clicks are disabled. Press "C" to restore your cursor!', 'color: #ef4444; font-size: 14px;');
+      return; // Completely block the click
     }
     
     setClickCount(prev => prev + 1);
