@@ -37,8 +37,8 @@ const Quiz = () => {
         </h1>
         
         <p className="text-muted-foreground max-w-md mx-auto mb-8">
-          You've proven you're persistent enough. This is where your BCA quiz 
-          content would go. For now, enjoy this victory screen!
+          You've proven you're persistent enough. 
+          For now, enjoy this victory screen!
         </p>
 
         <div className="space-y-4">
@@ -72,7 +72,7 @@ const Quiz = () => {
       </div>
 
       <div className="absolute bottom-8 text-xs text-muted-foreground opacity-50">
-        <p>BCA Final Semester Project Demo</p>
+        <p>Hope you enjoyed :-D</p>
       </div>
 
       <style>{`
