@@ -30,7 +30,6 @@ const consoleHints = [
 const Index = () => {
   const navigate = useNavigate();
   const [clickCount, setClickCount] = useState(0);
-  const [hoverCount, setHoverCount] = useState(0);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [isGlitching, setIsGlitching] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
@@ -39,8 +38,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRevealed, setIsRevealed] = useState(false);
 
-  const totalInteractions = clickCount + Math.floor(hoverCount / 3);
-  const breakThreshold = 20;
+  const breakThreshold = 15;
 
   // Console welcome message
   useEffect(() => {
@@ -49,40 +47,40 @@ const Index = () => {
     console.log('%c💡 Hint: Interact with the page...', 'color: #fbbf24; font-size: 12px;');
   }, []);
 
-  // Update message based on interactions
+  // Update message based on clicks
   useEffect(() => {
     const messageIndex = Math.min(
-      Math.floor(totalInteractions / 2.5),
+      Math.floor(clickCount / 2),
       messages.length - 1
     );
     setCurrentMessage(messageIndex);
 
     // Log hints at certain thresholds
-    if (totalInteractions > 0 && totalInteractions % 3 === 0) {
+    if (clickCount > 0 && clickCount % 2 === 0) {
       const hintIndex = Math.min(
-        Math.floor(totalInteractions / 3),
+        Math.floor(clickCount / 2),
         consoleHints.length - 1
       );
       console.log(`%c${consoleHints[hintIndex]}`, 'color: #fbbf24; font-size: 12px;');
     }
 
-    // Show cracks after certain interactions
-    if (totalInteractions >= 8) {
+    // Show cracks after certain clicks
+    if (clickCount >= 6) {
       setShowCracks(true);
-      setCrackIntensity(Math.min((totalInteractions - 8) / 12, 1));
+      setCrackIntensity(Math.min((clickCount - 6) / 9, 1));
     }
 
     // Reveal the "real" link
-    if (totalInteractions >= breakThreshold - 3) {
+    if (clickCount >= breakThreshold - 3) {
       setIsRevealed(true);
     }
 
     // Trigger break
-    if (totalInteractions >= breakThreshold) {
+    if (clickCount >= breakThreshold) {
       console.log('%c💥 THE BARRIER IS BROKEN!', 'color: #ef4444; font-size: 24px; font-weight: bold;');
       setTimeout(() => setIsLoading(true), 500);
     }
-  }, [totalInteractions]);
+  }, [clickCount]);
 
   const handleClick = useCallback(() => {
     if (isLoading) return;
@@ -92,21 +90,12 @@ const Index = () => {
     setTimeout(() => setIsShaking(false), 500);
 
     // Random glitch effect
-    if (Math.random() > 0.6) {
+    if (Math.random() > 0.5) {
       setIsGlitching(true);
       setTimeout(() => setIsGlitching(false), 300);
     }
   }, [isLoading]);
-
-  const handleHover = useCallback(() => {
-    if (isLoading) return;
-    setHoverCount(prev => prev + 1);
     
-    if (Math.random() > 0.8) {
-      setIsGlitching(true);
-      setTimeout(() => setIsGlitching(false), 150);
-    }
-  }, [isLoading]);
 
   const handleLoadingComplete = () => {
     navigate('/quiz');
@@ -120,7 +109,6 @@ const Index = () => {
     <div 
       className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden scanlines cursor-pointer select-none"
       onClick={handleClick}
-      onMouseMove={handleHover}
     >
       <CrackOverlay intensity={crackIntensity} visible={showCracks} />
       
@@ -149,19 +137,19 @@ const Index = () => {
         {/* Subtext */}
         <p 
           className={`text-muted-foreground text-sm md:text-base transition-opacity duration-500 ${
-            totalInteractions > 5 ? 'opacity-50' : 'opacity-100'
+            clickCount > 4 ? 'opacity-50' : 'opacity-100'
           }`}
         >
-          {totalInteractions < 5 && "This page is intentionally empty."}
-          {totalInteractions >= 5 && totalInteractions < 10 && "...or so you think."}
-          {totalInteractions >= 10 && totalInteractions < 15 && "Something is happening..."}
-          {totalInteractions >= 15 && "You're almost there!"}
+          {clickCount < 4 && "This page is intentionally empty."}
+          {clickCount >= 4 && clickCount < 8 && "...or so you think."}
+          {clickCount >= 8 && clickCount < 12 && "Something is happening..."}
+          {clickCount >= 12 && "You're almost there!"}
         </p>
 
         {/* Hidden interaction counter */}
-        {totalInteractions > 3 && (
+        {clickCount > 3 && (
           <p className="text-xs text-muted-foreground mt-8 opacity-30 font-mono">
-            [{totalInteractions}/{breakThreshold}]
+            [{clickCount}/{breakThreshold}]
           </p>
         )}
 
@@ -180,7 +168,7 @@ const Index = () => {
       </div>
 
       {/* Floating glitch elements */}
-      {totalInteractions > 8 && (
+      {clickCount > 6 && (
         <>
           <div 
             className="absolute top-1/4 left-1/4 text-muted-foreground text-xs opacity-20 animate-float"
@@ -206,7 +194,7 @@ const Index = () => {
       {/* Footer hint */}
       <div className="absolute bottom-8 text-xs text-muted-foreground opacity-30">
         <p className={`transition-all duration-300 ${isGlitching ? 'animate-flicker' : ''}`}>
-          {totalInteractions < 3 
+          {clickCount < 3 
             ? "Nothing happens here. Trust me." 
             : "Check the console for secrets..."}
         </p>
