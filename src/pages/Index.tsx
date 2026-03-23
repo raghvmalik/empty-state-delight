@@ -15,6 +15,8 @@ import LightsOut from '@/components/LightsOut';
 import FakeVirusScan from '@/components/FakeVirusScan';
 import SimonSays from '@/components/SimonSays';
 import DiscoMode from '@/components/DiscoMode';
+import VictoryStats from '@/components/VictoryStats';
+import { playClick, playStageComplete, playBlocked, playError } from '@/lib/sounds';
 
 const messages = [
   "There is no website here.",
