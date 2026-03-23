@@ -467,14 +467,14 @@ const Index = () => {
       <CursorBlocker visible={cursorHidden && !cursorRestored} />
       <MatrixRain visible={showMatrix} />
       <DiscoMode active={discoMode} />
-      <FakeBSOD visible={showBSOD && !bsodDismissed} onDismiss={() => { setBsodDismissed(true); setClickCount(c => c + 3); }} />
-      <PasswordTroll visible={showPassword && !passwordSolved} onSolved={() => { setPasswordSolved(true); setShowPassword(false); setClickCount(c => c + 5); }} />
-      <FakeCookieConsent visible={showCookieConsent && !cookieAccepted} onAccept={() => { setCookieAccepted(true); setShowCookieConsent(false); setClickCount(c => c + 3); }} />
-      <LightsOut visible={showLightsOut && !lightsFixed} onSolved={() => { setLightsFixed(true); setShowLightsOut(false); setClickCount(c => c + 3); }} />
-      <FakeVirusScan visible={showVirusScan && !virusScanDone} onComplete={() => { setVirusScanDone(true); setShowVirusScan(false); setClickCount(c => c + 3); }} />
-      <SimonSays visible={showSimonSays && !simonDone} onComplete={() => { setSimonDone(true); setShowSimonSays(false); setClickCount(c => c + 5); }} />
+      <FakeBSOD visible={showBSOD && !bsodDismissed} onDismiss={() => { setBsodDismissed(true); setClickCount(c => c + 3); playStageComplete(); }} />
+      <PasswordTroll visible={showPassword && !passwordSolved} onSolved={() => { setPasswordSolved(true); setShowPassword(false); setClickCount(c => c + 5); playStageComplete(); }} />
+      <FakeCookieConsent visible={showCookieConsent && !cookieAccepted} onAccept={() => { setCookieAccepted(true); setShowCookieConsent(false); setClickCount(c => c + 3); playStageComplete(); }} />
+      <LightsOut visible={showLightsOut && !lightsFixed} onSolved={() => { setLightsFixed(true); setShowLightsOut(false); setClickCount(c => c + 3); playStageComplete(); }} />
+      <FakeVirusScan visible={showVirusScan && !virusScanDone} onComplete={() => { setVirusScanDone(true); setShowVirusScan(false); setClickCount(c => c + 3); playStageComplete(); }} />
+      <SimonSays visible={showSimonSays && !simonDone} onComplete={() => { setSimonDone(true); setShowSimonSays(false); setClickCount(c => c + 5); playStageComplete(); }} />
       <GravityFlip active={gravityFlip && !gravityFixed} />
-      <CountdownTroll visible={showCountdown && !countdownDone} onComplete={() => { setCountdownDone(true); setShowCountdown(false); setClickCount(c => c + 3); }} />
+      <CountdownTroll visible={showCountdown && !countdownDone} onComplete={() => { setCountdownDone(true); setShowCountdown(false); setClickCount(c => c + 3); playStageComplete(); }} />
       
       {showPopup && (
         <>
