@@ -355,16 +355,21 @@ const Index = () => {
   };
 
   const handleClick = useCallback(() => {
-    if (isLoading) return;
+    if (isLoading || showVictory) return;
     if (cursorHidden && !cursorRestored) {
       console.log('%c🚫 Clicks disabled! Press "C"!', 'color: #ef4444;');
+      playBlocked();
       return;
     }
     if ((showPassword && !passwordSolved) || (showBSOD && !bsodDismissed) || 
         (showCountdown && !countdownDone) || (showCookieConsent && !cookieAccepted) ||
         (showLightsOut && !lightsFixed) || (showVirusScan && !virusScanDone) ||
-        (showSimonSays && !simonDone)) return;
+        (showSimonSays && !simonDone)) {
+      playBlocked();
+      return;
+    }
     
+    playClick();
     setClickCount(prev => prev + 1);
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 500);
@@ -380,7 +385,7 @@ const Index = () => {
       setClickEmojis(prev => [...prev.slice(-10), newE]);
       setTimeout(() => setClickEmojis(prev => prev.filter(e => e.id !== newE.id)), 1000);
     }
-  }, [isLoading, cursorHidden, cursorRestored, showPassword, passwordSolved, showBSOD, bsodDismissed, showCountdown, countdownDone, showCookieConsent, cookieAccepted, showLightsOut, lightsFixed, showVirusScan, virusScanDone, showSimonSays, simonDone, clickCount, mousePosition]);
+  }, [isLoading, showVictory, cursorHidden, cursorRestored, showPassword, passwordSolved, showBSOD, bsodDismissed, showCountdown, countdownDone, showCookieConsent, cookieAccepted, showLightsOut, lightsFixed, showVirusScan, virusScanDone, showSimonSays, simonDone, clickCount, mousePosition]);
 
   const handlePopupClose = () => {
     setPopupCount(prev => {
