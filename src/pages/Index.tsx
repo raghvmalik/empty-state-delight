@@ -298,7 +298,7 @@ const Index = () => {
     }
 
     // Final
-    if (clickCount >= breakThreshold) {
+    if (clickCount >= breakThreshold && !showVictory) {
       console.log('%c💥 THE BARRIER IS BROKEN!', 'color: #ef4444; font-size: 24px; font-weight: bold;');
       const newConfetti = Array.from({ length: 30 }, (_, i) => ({
         x: Math.random() * 100, y: Math.random() * 100,
@@ -306,7 +306,8 @@ const Index = () => {
         id: i,
       }));
       setConfettiEmojis(newConfetti);
-      setTimeout(() => setIsLoading(true), 1500);
+      setCompletionTime(Math.floor((Date.now() - startTime) / 1000));
+      setTimeout(() => setShowVictory(true), 1000);
     }
   }, [clickCount, cursorRestored, secretKeyPressed, popupCount, cookieAccepted, passwordSolved, lightsFixed, virusScanDone, bsodDismissed, simonDone, gravityFixed, miniGameHits, countdownDone]);
 
