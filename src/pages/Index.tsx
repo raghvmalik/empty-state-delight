@@ -405,6 +405,19 @@ const Index = () => {
     setMiniGameTarget({ x: 10 + Math.random() * 80, y: 10 + Math.random() * 80 });
   };
 
+  if (showVictory) {
+    const clearedStages = stages.filter(s => clickCount >= (stages[stages.indexOf(s) + 1]?.threshold || breakThreshold)).length;
+    return (
+      <VictoryStats
+        totalClicks={clickCount}
+        timeTaken={completionTime}
+        stagesCleared={clearedStages || stages.length}
+        totalStages={stages.length}
+        onContinue={() => setIsLoading(true)}
+      />
+    );
+  }
+
   if (isLoading) return <LoadingScreen onComplete={() => navigate('/quiz')} />;
 
   const stages = [
