@@ -405,21 +405,6 @@ const Index = () => {
     setMiniGameTarget({ x: 10 + Math.random() * 80, y: 10 + Math.random() * 80 });
   };
 
-  if (showVictory) {
-    const clearedStages = stages.filter(s => clickCount >= (stages[stages.indexOf(s) + 1]?.threshold || breakThreshold)).length;
-    return (
-      <VictoryStats
-        totalClicks={clickCount}
-        timeTaken={completionTime}
-        stagesCleared={clearedStages || stages.length}
-        totalStages={stages.length}
-        onContinue={() => setIsLoading(true)}
-      />
-    );
-  }
-
-  if (isLoading) return <LoadingScreen onComplete={() => navigate('/quiz')} />;
-
   const stages = [
     { threshold: 0, label: '👆' }, { threshold: 8, label: '🍪' },
     { threshold: 14, label: '🖱️' }, { threshold: 22, label: '🏃' },
@@ -431,6 +416,20 @@ const Index = () => {
     { threshold: 90, label: '⏰' }, { threshold: 98, label: '🟢' },
     { threshold: 110, label: '🏆' },
   ];
+
+  if (showVictory) {
+    return (
+      <VictoryStats
+        totalClicks={clickCount}
+        timeTaken={completionTime}
+        stagesCleared={stages.length}
+        totalStages={stages.length}
+        onContinue={() => setIsLoading(true)}
+      />
+    );
+  }
+
+  if (isLoading) return <LoadingScreen onComplete={() => navigate('/quiz')} />;
 
   const getSubtext = () => {
     if (clickCount < 3) return "Error 404 :-(";
