@@ -150,24 +150,28 @@ const Index = () => {
         setCursorHidden(false);
         setSecretKeyPressed(true);
         setClickCount(prev => prev + 3);
+        playStageComplete();
       }
       if (showPopup && e.key === 'Escape') {
         console.log('%c🎉 ESC closes the chaos!', 'color: #2dd4bf;');
         setShowPopup(false);
         setPopupCount(0);
         setClickCount(prev => prev + 2);
+        playStageComplete();
       }
       if (isRunningAway && e.key.toLowerCase() === 'r') {
         console.log('%c🎉 Text frozen!', 'color: #2dd4bf;');
         setIsRunningAway(false);
         setTextPosition({ x: 0, y: 0 });
         setClickCount(prev => prev + 2);
+        playStageComplete();
       }
       if (gravityFlip && !gravityFixed && e.key.toLowerCase() === 'g') {
         console.log('%c🎉 Gravity stabilized!', 'color: #2dd4bf;');
         setGravityFlip(false);
         setGravityFixed(true);
         setClickCount(prev => prev + 3);
+        playStageComplete();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
