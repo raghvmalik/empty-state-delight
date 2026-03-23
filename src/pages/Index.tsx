@@ -15,6 +15,8 @@ import LightsOut from '@/components/LightsOut';
 import FakeVirusScan from '@/components/FakeVirusScan';
 import SimonSays from '@/components/SimonSays';
 import DiscoMode from '@/components/DiscoMode';
+import VictoryStats from '@/components/VictoryStats';
+import { playClick, playStageComplete, playBlocked, playError } from '@/lib/sounds';
 
 const messages = [
   "There is no website here.",
@@ -72,6 +74,10 @@ const Index = () => {
   const [clickCount, setClickCount] = useState(0);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [showVictory, setShowVictory] = useState(false);
+  const [startTime] = useState(() => Date.now());
+  const [completionTime, setCompletionTime] = useState(0);
+  const [lastStageClick, setLastStageClick] = useState(0); // track stage transitions for sound
   
   const [isGlitching, setIsGlitching] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
@@ -144,24 +150,28 @@ const Index = () => {
         setCursorHidden(false);
         setSecretKeyPressed(true);
         setClickCount(prev => prev + 3);
+        playStageComplete();
       }
       if (showPopup && e.key === 'Escape') {
         console.log('%c🎉 ESC closes the chaos!', 'color: #2dd4bf;');
         setShowPopup(false);
         setPopupCount(0);
         setClickCount(prev => prev + 2);
+        playStageComplete();
       }
       if (isRunningAway && e.key.toLowerCase() === 'r') {
         console.log('%c🎉 Text frozen!', 'color: #2dd4bf;');
         setIsRunningAway(false);
         setTextPosition({ x: 0, y: 0 });
         setClickCount(prev => prev + 2);
+        playStageComplete();
       }
       if (gravityFlip && !gravityFixed && e.key.toLowerCase() === 'g') {
         console.log('%c🎉 Gravity stabilized!', 'color: #2dd4bf;');
         setGravityFlip(false);
         setGravityFixed(true);
         setClickCount(prev => prev + 3);
+        playStageComplete();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -292,7 +302,7 @@ const Index = () => {
     }
 
     // Final
-    if (clickCount >= breakThreshold) {
+    if (clickCount >= breakThreshold && !showVictory) {
       console.log('%c💥 THE BARRIER IS BROKEN!', 'color: #ef4444; font-size: 24px; font-weight: bold;');
       const newConfetti = Array.from({ length: 30 }, (_, i) => ({
         x: Math.random() * 100, y: Math.random() * 100,
@@ -300,7 +310,8 @@ const Index = () => {
         id: i,
       }));
       setConfettiEmojis(newConfetti);
-      setTimeout(() => setIsLoading(true), 1500);
+      setCompletionTime(Math.floor((Date.now() - startTime) / 1000));
+      setTimeout(() => setShowVictory(true), 1000);
     }
   }, [clickCount, cursorRestored, secretKeyPressed, popupCount, cookieAccepted, passwordSolved, lightsFixed, virusScanDone, bsodDismissed, simonDone, gravityFixed, miniGameHits, countdownDone]);
 
@@ -348,16 +359,21 @@ const Index = () => {
   };
 
   const handleClick = useCallback(() => {
-    if (isLoading) return;
+    if (isLoading || showVictory) return;
     if (cursorHidden && !cursorRestored) {
       console.log('%c🚫 Clicks disabled! Press "C"!', 'color: #ef4444;');
+      playBlocked();
       return;
     }
     if ((showPassword && !passwordSolved) || (showBSOD && !bsodDismissed) || 
         (showCountdown && !countdownDone) || (showCookieConsent && !cookieAccepted) ||
         (showLightsOut && !lightsFixed) || (showVirusScan && !virusScanDone) ||
-        (showSimonSays && !simonDone)) return;
+        (showSimonSays && !simonDone)) {
+      playBlocked();
+      return;
+    }
     
+    playClick();
     setClickCount(prev => prev + 1);
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 500);
@@ -373,7 +389,7 @@ const Index = () => {
       setClickEmojis(prev => [...prev.slice(-10), newE]);
       setTimeout(() => setClickEmojis(prev => prev.filter(e => e.id !== newE.id)), 1000);
     }
-  }, [isLoading, cursorHidden, cursorRestored, showPassword, passwordSolved, showBSOD, bsodDismissed, showCountdown, countdownDone, showCookieConsent, cookieAccepted, showLightsOut, lightsFixed, showVirusScan, virusScanDone, showSimonSays, simonDone, clickCount, mousePosition]);
+  }, [isLoading, showVictory, cursorHidden, cursorRestored, showPassword, passwordSolved, showBSOD, bsodDismissed, showCountdown, countdownDone, showCookieConsent, cookieAccepted, showLightsOut, lightsFixed, showVirusScan, virusScanDone, showSimonSays, simonDone, clickCount, mousePosition]);
 
   const handlePopupClose = () => {
     setPopupCount(prev => {
@@ -393,8 +409,6 @@ const Index = () => {
     setMiniGameTarget({ x: 10 + Math.random() * 80, y: 10 + Math.random() * 80 });
   };
 
-  if (isLoading) return <LoadingScreen onComplete={() => navigate('/quiz')} />;
-
   const stages = [
     { threshold: 0, label: '👆' }, { threshold: 8, label: '🍪' },
     { threshold: 14, label: '🖱️' }, { threshold: 22, label: '🏃' },
@@ -406,6 +420,20 @@ const Index = () => {
     { threshold: 90, label: '⏰' }, { threshold: 98, label: '🟢' },
     { threshold: 110, label: '🏆' },
   ];
+
+  if (showVictory) {
+    return (
+      <VictoryStats
+        totalClicks={clickCount}
+        timeTaken={completionTime}
+        stagesCleared={stages.length}
+        totalStages={stages.length}
+        onContinue={() => setIsLoading(true)}
+      />
+    );
+  }
+
+  if (isLoading) return <LoadingScreen onComplete={() => navigate('/quiz')} />;
 
   const getSubtext = () => {
     if (clickCount < 3) return "Error 404 :-(";
@@ -443,14 +471,14 @@ const Index = () => {
       <CursorBlocker visible={cursorHidden && !cursorRestored} />
       <MatrixRain visible={showMatrix} />
       <DiscoMode active={discoMode} />
-      <FakeBSOD visible={showBSOD && !bsodDismissed} onDismiss={() => { setBsodDismissed(true); setClickCount(c => c + 3); }} />
-      <PasswordTroll visible={showPassword && !passwordSolved} onSolved={() => { setPasswordSolved(true); setShowPassword(false); setClickCount(c => c + 5); }} />
-      <FakeCookieConsent visible={showCookieConsent && !cookieAccepted} onAccept={() => { setCookieAccepted(true); setShowCookieConsent(false); setClickCount(c => c + 3); }} />
-      <LightsOut visible={showLightsOut && !lightsFixed} onSolved={() => { setLightsFixed(true); setShowLightsOut(false); setClickCount(c => c + 3); }} />
-      <FakeVirusScan visible={showVirusScan && !virusScanDone} onComplete={() => { setVirusScanDone(true); setShowVirusScan(false); setClickCount(c => c + 3); }} />
-      <SimonSays visible={showSimonSays && !simonDone} onComplete={() => { setSimonDone(true); setShowSimonSays(false); setClickCount(c => c + 5); }} />
+      <FakeBSOD visible={showBSOD && !bsodDismissed} onDismiss={() => { setBsodDismissed(true); setClickCount(c => c + 3); playStageComplete(); }} />
+      <PasswordTroll visible={showPassword && !passwordSolved} onSolved={() => { setPasswordSolved(true); setShowPassword(false); setClickCount(c => c + 5); playStageComplete(); }} />
+      <FakeCookieConsent visible={showCookieConsent && !cookieAccepted} onAccept={() => { setCookieAccepted(true); setShowCookieConsent(false); setClickCount(c => c + 3); playStageComplete(); }} />
+      <LightsOut visible={showLightsOut && !lightsFixed} onSolved={() => { setLightsFixed(true); setShowLightsOut(false); setClickCount(c => c + 3); playStageComplete(); }} />
+      <FakeVirusScan visible={showVirusScan && !virusScanDone} onComplete={() => { setVirusScanDone(true); setShowVirusScan(false); setClickCount(c => c + 3); playStageComplete(); }} />
+      <SimonSays visible={showSimonSays && !simonDone} onComplete={() => { setSimonDone(true); setShowSimonSays(false); setClickCount(c => c + 5); playStageComplete(); }} />
       <GravityFlip active={gravityFlip && !gravityFixed} />
-      <CountdownTroll visible={showCountdown && !countdownDone} onComplete={() => { setCountdownDone(true); setShowCountdown(false); setClickCount(c => c + 3); }} />
+      <CountdownTroll visible={showCountdown && !countdownDone} onComplete={() => { setCountdownDone(true); setShowCountdown(false); setClickCount(c => c + 3); playStageComplete(); }} />
       
       {showPopup && (
         <>
