@@ -74,6 +74,10 @@ const Index = () => {
   const [clickCount, setClickCount] = useState(0);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [showVictory, setShowVictory] = useState(false);
+  const [startTime] = useState(() => Date.now());
+  const [completionTime, setCompletionTime] = useState(0);
+  const [lastStageClick, setLastStageClick] = useState(0); // track stage transitions for sound
   
   const [isGlitching, setIsGlitching] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
