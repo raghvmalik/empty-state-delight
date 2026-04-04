@@ -16,7 +16,9 @@ import FakeVirusScan from '@/components/FakeVirusScan';
 import SimonSays from '@/components/SimonSays';
 import DiscoMode from '@/components/DiscoMode';
 import VictoryStats from '@/components/VictoryStats';
+import SubtitleOverlay from '@/components/SubtitleOverlay';
 import { playClick, playStageComplete, playBlocked, playError } from '@/lib/sounds';
+import { narrate, narrateNow, narrateClickReaction, stopNarration } from '@/lib/narrator';
 
 const messages = [
   "There is no website here.",
