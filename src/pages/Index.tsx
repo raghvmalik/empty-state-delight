@@ -128,6 +128,7 @@ const Index = () => {
   const [confettiEmojis, setConfettiEmojis] = useState<{x: number, y: number, emoji: string, id: number}[]>([]);
 
   const breakThreshold = 120;
+  const narratedStages = useRef<Set<string>>(new Set());
 
   // Intro narration
   useEffect(() => {
