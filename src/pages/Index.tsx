@@ -168,6 +168,7 @@ const Index = () => {
         setSecretKeyPressed(true);
         setClickCount(prev => prev + 3);
         playStageComplete();
+        narrateNow("What?! How did you get that back?!");
       }
       if (showPopup && e.key === 'Escape') {
         console.log('%c🎉 ESC closes the chaos!', 'color: #2dd4bf;');
@@ -175,6 +176,7 @@ const Index = () => {
         setPopupCount(0);
         setClickCount(prev => prev + 2);
         playStageComplete();
+        narrateNow("You closed them?! Those took me ages to make!");
       }
       if (isRunningAway && e.key.toLowerCase() === 'r') {
         console.log('%c🎉 Text frozen!', 'color: #2dd4bf;');
@@ -182,6 +184,7 @@ const Index = () => {
         setTextPosition({ x: 0, y: 0 });
         setClickCount(prev => prev + 2);
         playStageComplete();
+        narrateNow("Hey! You froze my text! That's cheating!");
       }
       if (gravityFlip && !gravityFixed && e.key.toLowerCase() === 'g') {
         console.log('%c🎉 Gravity stabilized!', 'color: #2dd4bf;');
@@ -189,6 +192,7 @@ const Index = () => {
         setGravityFixed(true);
         setClickCount(prev => prev + 3);
         playStageComplete();
+        narrateNow("You fixed gravity? Fine. Show off.");
       }
     };
     window.addEventListener('keydown', handleKeyDown);
