@@ -526,14 +526,15 @@ const Index = () => {
       <CursorBlocker visible={cursorHidden && !cursorRestored} />
       <MatrixRain visible={showMatrix} />
       <DiscoMode active={discoMode} />
-      <FakeBSOD visible={showBSOD && !bsodDismissed} onDismiss={() => { setBsodDismissed(true); setClickCount(c => c + 3); playStageComplete(); }} />
-      <PasswordTroll visible={showPassword && !passwordSolved} onSolved={() => { setPasswordSolved(true); setShowPassword(false); setClickCount(c => c + 5); playStageComplete(); }} />
-      <FakeCookieConsent visible={showCookieConsent && !cookieAccepted} onAccept={() => { setCookieAccepted(true); setShowCookieConsent(false); setClickCount(c => c + 3); playStageComplete(); }} />
-      <LightsOut visible={showLightsOut && !lightsFixed} onSolved={() => { setLightsFixed(true); setShowLightsOut(false); setClickCount(c => c + 3); playStageComplete(); }} />
-      <FakeVirusScan visible={showVirusScan && !virusScanDone} onComplete={() => { setVirusScanDone(true); setShowVirusScan(false); setClickCount(c => c + 3); playStageComplete(); }} />
-      <SimonSays visible={showSimonSays && !simonDone} onComplete={() => { setSimonDone(true); setShowSimonSays(false); setClickCount(c => c + 5); playStageComplete(); }} />
+      <FakeBSOD visible={showBSOD && !bsodDismissed} onDismiss={() => { setBsodDismissed(true); setClickCount(c => c + 3); playStageComplete(); narrateNow("HOW?! You bypassed my blue screen!"); }} />
+      <PasswordTroll visible={showPassword && !passwordSolved} onSolved={() => { setPasswordSolved(true); setShowPassword(false); setClickCount(c => c + 5); playStageComplete(); narrateNow("You guessed it?! That was supposed to be uncrackable!"); }} />
+      <FakeCookieConsent visible={showCookieConsent && !cookieAccepted} onAccept={() => { setCookieAccepted(true); setShowCookieConsent(false); setClickCount(c => c + 3); playStageComplete(); narrateNow("Fine, cookies accepted. Now things get serious."); }} />
+      <LightsOut visible={showLightsOut && !lightsFixed} onSolved={() => { setLightsFixed(true); setShowLightsOut(false); setClickCount(c => c + 3); playStageComplete(); narrateNow("You found the light switch! Impressive."); }} />
+      <FakeVirusScan visible={showVirusScan && !virusScanDone} onComplete={() => { setVirusScanDone(true); setShowVirusScan(false); setClickCount(c => c + 3); playStageComplete(); narrateNow("Wait... you're clean?! That can't be right."); }} />
+      <SimonSays visible={showSimonSays && !simonDone} onComplete={() => { setSimonDone(true); setShowSimonSays(false); setClickCount(c => c + 5); playStageComplete(); narrateNow("Impressive brain power! But I have more tricks."); }} />
       <GravityFlip active={gravityFlip && !gravityFixed} />
-      <CountdownTroll visible={showCountdown && !countdownDone} onComplete={() => { setCountdownDone(true); setShowCountdown(false); setClickCount(c => c + 3); playStageComplete(); }} />
+      <CountdownTroll visible={showCountdown && !countdownDone} onComplete={() => { setCountdownDone(true); setShowCountdown(false); setClickCount(c => c + 3); playStageComplete(); narrateNow("I can't believe you actually waited through that."); }} />
+      <SubtitleOverlay />
       
       {showPopup && (
         <>
