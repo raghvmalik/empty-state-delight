@@ -424,6 +424,12 @@ const Index = () => {
     
     playClick();
     setClickCount(prev => prev + 1);
+    
+    // Random click narration (not every click, ~20% chance after click 10)
+    if (clickCount > 10 && Math.random() < 0.2) {
+      narrateClickReaction();
+    }
+    
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 500);
     if (Math.random() > 0.5) {
