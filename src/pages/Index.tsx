@@ -205,6 +205,19 @@ const Index = () => {
       console.log(`%c${consoleHints[hintIndex]}`, 'color: #fbbf24; font-size: 12px;');
     }
 
+    // Helper to narrate once per stage
+    const narrateOnce = (key: string, text: string) => {
+      if (!narratedStages.current.has(key)) {
+        narratedStages.current.add(key);
+        narrateNow(text);
+      }
+    };
+
+    // Click-based narration (first clicks)
+    if (clickCount === 1) narrateOnce('click1', "Wait... are you clicking? Why are you clicking?");
+    if (clickCount === 4) narrateOnce('click4', "Seriously, stop that. There's nothing here!");
+    if (clickCount === 7) narrateOnce('click7', "You're persistent, I'll give you that.");
+
     // STAGE 1: Initial clicks + zoom pulses (0-8)
     if (clickCount >= 3 && clickCount < 8 && Math.random() > 0.6) {
       setScreenZoom(1 + Math.random() * 0.05);
@@ -214,17 +227,20 @@ const Index = () => {
     // STAGE 2: Cookie consent (8-14)
     if (clickCount >= 8 && !cookieAccepted && !showCookieConsent) {
       setShowCookieConsent(true);
+      narrateOnce('cookie', "Oh great, now I have to show you the cookie popup. Company policy.");
     }
 
     // STAGE 3: Cursor stolen (14-22)
     if (clickCount >= 14 && !cursorRestored && !secretKeyPressed && cookieAccepted) {
       setCursorHidden(true);
       setShowKeyHint(true);
+      narrateOnce('cursor', "Ha! Good luck clicking without a cursor!");
     }
 
     // STAGE 4: Text runs away (22-28)
     if (clickCount >= 22 && clickCount < 28 && !isRunningAway && cursorRestored) {
       setIsRunningAway(true);
+      narrateOnce('runtext', "Run, text, RUN! Don't let them catch you!");
       console.log('%c🏃 Text is running! Press "R"!', 'color: #ef4444;');
     }
 
@@ -237,22 +253,26 @@ const Index = () => {
     // STAGE 6: Popup chaos (32-38)
     if (clickCount >= 32 && clickCount < 38 && !showPopup && popupCount < 3) {
       setShowPopup(true);
+      narrateOnce('popup', "Popups! Everyone's favorite! You're welcome.");
     }
 
     // STAGE 7: Password wall (38-44)
     if (clickCount >= 38 && !passwordSolved && !showPassword) {
       setShowPassword(true);
+      narrateOnce('password', "Let's see if you can guess the password...");
     }
 
     // STAGE 8: Lights out (44-50)
     if (clickCount >= 44 && !lightsFixed && !showLightsOut && passwordSolved) {
       setShowLightsOut(true);
+      narrateOnce('lights', "Oops... who turned off the lights?");
       console.log('%c🔦 Who turned off the lights?!', 'color: #ef4444;');
     }
 
     // STAGE 9: Virus scan (50-58)
     if (clickCount >= 50 && !virusScanDone && !showVirusScan && lightsFixed) {
       setShowVirusScan(true);
+      narrateOnce('virus', "Hold on, let me scan you for viruses...");
     }
 
     // STAGE 10: Fake progress (58-62)
@@ -265,16 +285,19 @@ const Index = () => {
     if (clickCount >= 62 && !bsodDismissed && !showBSOD && virusScanDone) {
       setShowBSOD(true);
       setShowFakeProgress(false);
+      narrateOnce('bsod', "Oh no... that doesn't look good.");
     }
 
     // STAGE 12: Simon Says (68-76)
     if (clickCount >= 68 && !simonDone && !showSimonSays && bsodDismissed) {
       setShowSimonSays(true);
+      narrateOnce('simon', "Time for a brain test! Try to keep up.");
     }
 
     // STAGE 13: Gravity flip (76-82)
     if (clickCount >= 76 && !gravityFixed && !gravityFlip && simonDone) {
       setGravityFlip(true);
+      narrateOnce('gravity', "Everything's upside down? That's a feature, not a bug.");
     }
 
     // STAGE 14: Disco + mini game (82-90)
@@ -283,6 +306,7 @@ const Index = () => {
       if (!showMiniGame && miniGameHits < 5) {
         setShowMiniGame(true);
         setMiniGameHits(0);
+        narrateOnce('disco', "Fine, let's at least have some fun while you destroy my website.");
       }
     }
 
@@ -291,12 +315,14 @@ const Index = () => {
       setShowCountdown(true);
       setShowMiniGame(false);
       setDiscoMode(false);
+      narrateOnce('countdown', "Okay okay, I'll let you in. Just wait...");
     }
 
     // STAGE 16: Matrix + text scramble (98-110)
     if (clickCount >= 98 && clickCount < 110 && countdownDone) {
       setShowMatrix(true);
       setTextScramble(true);
+      narrateOnce('matrix', "You're seeing the code now... you're the chosen one.");
       if (Math.random() > 0.7) {
         setScreenRotate((Math.random() - 0.5) * 4);
         setTimeout(() => setScreenRotate(0), 500);
@@ -305,6 +331,7 @@ const Index = () => {
     if (clickCount >= 110) {
       setShowMatrix(false);
       setTextScramble(false);
+      narrateOnce('cracking', "No... NO! The barrier is cracking!");
     }
 
     // Cracks
@@ -320,6 +347,7 @@ const Index = () => {
 
     // Final
     if (clickCount >= breakThreshold && !showVictory) {
+      narrateOnce('victory', "Fine. You win. I hope you're happy.");
       console.log('%c💥 THE BARRIER IS BROKEN!', 'color: #ef4444; font-size: 24px; font-weight: bold;');
       const newConfetti = Array.from({ length: 30 }, (_, i) => ({
         x: Math.random() * 100, y: Math.random() * 100,
