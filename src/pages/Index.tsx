@@ -129,10 +129,24 @@ const Index = () => {
 
   const breakThreshold = 120;
 
+  // Intro narration
   useEffect(() => {
     console.log('%c🎭 Welcome, curious one...', 'color: #2dd4bf; font-size: 20px; font-weight: bold;');
     console.log('%cThere really is no website here. Or is there?', 'color: #6b7280; font-size: 14px;');
     console.log('%c💡 Hint: The website will fight back. Be persistent.', 'color: #fbbf24; font-size: 12px;');
+    
+    const timer = setTimeout(() => {
+      narrate("Hello there... This is awkward.", () => {
+        narrate("You see, there's supposed to be a website here.", () => {
+          narrate("But... sorry to disappoint you. There's nothing here. Please leave.");
+        });
+      });
+    }, 1000);
+    
+    return () => {
+      clearTimeout(timer);
+      stopNarration();
+    };
   }, []);
 
   useEffect(() => {
