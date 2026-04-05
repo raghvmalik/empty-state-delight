@@ -10,29 +10,45 @@ const pickVoice = () => {
   const voices = window.speechSynthesis.getVoices();
   if (voices.length === 0) return null;
 
-  // Ranked preference — deep, dramatic, narrator-style voices
+  // Log all available voices for debugging
+  console.log('🎙️ Available voices:', voices.map(v => `${v.name} (${v.lang})`));
+
+  // Priority: natural-sounding English voices across browsers
   const preferred = [
+    // Chrome/Edge high-quality voices
+    'Microsoft Guy Online',
+    'Microsoft Ryan Online', 
+    'Microsoft Mark Online',
+    'Microsoft David Desktop',
     'Google UK English Male',
+    // macOS / Safari voices
+    'Aaron',
     'Daniel',
+    'Oliver',
+    'Ralph',
+    'Tom',
+    // Firefox / other
+    'English (America)+Male',
     'Microsoft David',
     'Microsoft Mark',
-    'Google US English',
-    'Samantha',
     'Alex',
-    'Rishi',
-    'Moira',
-    'Tessa',
     'Fred',
   ];
 
   for (const name of preferred) {
     const v = voices.find(v => v.name.includes(name));
-    if (v) { selectedVoice = v; return v; }
+    if (v) {
+      console.log('🎙️ Selected voice:', v.name);
+      selectedVoice = v;
+      return v;
+    }
   }
 
-  // Fallback: any English voice
-  const english = voices.find(v => v.lang.startsWith('en'));
-  if (english) { selectedVoice = english; return english; }
+  // Fallback: any male-sounding English voice, then any English voice
+  const english = voices.filter(v => v.lang.startsWith('en'));
+  const male = english.find(v => /male|guy|david|mark|daniel|tom|ralph|aaron|james/i.test(v.name));
+  if (male) { console.log('🎙️ Selected voice (fallback male):', male.name); selectedVoice = male; return male; }
+  if (english.length > 0) { console.log('🎙️ Selected voice (fallback en):', english[0].name); selectedVoice = english[0]; return english[0]; }
 
   selectedVoice = voices[0];
   return voices[0];
