@@ -1,5 +1,3 @@
-import { supabase } from '@/integrations/supabase/client';
-
 type SubtitleListener = (text: string, visible: boolean) => void;
 
 let listeners: SubtitleListener[] = [];
